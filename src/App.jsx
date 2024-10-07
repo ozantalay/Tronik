@@ -203,10 +203,37 @@ export default function App() {
 					- keyUp -> hedef nesnenin keyPressed özelliği = false 
 
 */
+    const  handleMouseDown=(keyName)=>{
+      setSynthKeys((prevKeys)=>prevKeys.map((key)=>key.keyName === keyName ? {...key,active:true}:key))
+
+    }
+    const  handleMouseUp=(keyName)=>{
+      setSynthKeys((prevKeys)=>prevKeys.map((key)=>key.keyName === keyName ? {...key,active:false}:key))
+    }
+    const  handleKeyDown=(event)=>{
+      const pressedKey=synthKeys.find(key=>key.computerKey===event.key)
+      if(pressedKey){
+        setSynthKeys((prevKeys)=>
+        prevKeys.map((key)=>key.keyName===pressedKey.keyName
+        ?{...key,active:true,keyPressed:true}:key
+        )
+      )
+      }
+    }
+    const  handleKeyUp=(event)=>{
+      const relasedKey=synthKeys.find(key=>key.computerKey===event.key)
+      if(relasedKey){
+        setSynthKeys((prevKeys)=>
+        prevKeys.map((key)=>key.keyName===relasedKey.keyName
+        ?{...key,keyPressed:false}:key
+        )
+      )
+      }
+    }
 
   return (
-    <div className='wrapper'>
-      <div className='main-container'>
+    <div className='wrapper'onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+      <div className='main-container 'onClick={(e)=>console.log(e.target)} onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
         <Settings {...propsBundle} />
 
         <Keys showKeys={showKeys} synthKeys={synthKeys} />
